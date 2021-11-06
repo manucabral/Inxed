@@ -1,6 +1,7 @@
 # Inxed
-A simple tool that collects info from a IPv4 address using [ip-api](https://ip-api.com/)
+A simple tool that collects information from a IPv4 address using [ip-api](https://ip-api.com/).
 
+Avaible only in **Windows**
 
 ## Images
 
