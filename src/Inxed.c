@@ -61,9 +61,29 @@ int SocketSend(SOCKET *st, char data[REQUEST_SIZE], char (*response)[BUFFER_SIZE
     return 0;
 }
 
-int PrintInformation(char *response)
+int SaveNotepad(char ip_address[IPV4_SIZE], char content[BUFFER_SIZE])
 {
-    char *token, *parsed = strtok(response, "\n");
+    FILE *f = NULL;
+    strcat(ip_address, ".txt");
+    if (f = fopen(ip_address, "w"))
+    {
+        size_t i = 0;
+        while (content[i++] != '\0')
+            fwrite(&content[i], sizeof(char), 1, f);
+        fclose(f);
+        puts("\n>> Notepad saved!");
+        return 0;
+    }
+    else
+    {
+        puts("\nError on save the notepad");
+        return 1;
+    }
+}
+
+int PrintInformation(char ip_address[IPV4_SIZE], char *response, char notepad_option)
+{
+    char *token, *parsed = strtok(response, "\n"), tmp[126], result[BUFFER_SIZE];
     int option = 0;
 
     for (size_t i = 0; i < 8; i++)
@@ -94,11 +114,16 @@ int PrintInformation(char *response)
     {
         token = strtok(NULL, ",");
         printf("\n");
-        for (size_t i = 0; i < MAX_FIELD_QUERY; i++)
+        for (size_t i = 0; i < MAX_FIELD_QUERY - 1; i++)
         {
-            printf("> %s: \%s\n", fields[i], token);
+            snprintf(tmp, sizeof tmp, "> %s: \%s\n", fields[i], token);
+            printf("%s", tmp);
+            if (notepad_option == 'Y')
+                strcat(result, tmp);
             token = strtok(NULL, ",");
         }
+        if (notepad_option == 'Y')
+            SaveNotepad(ip_address, result);
         return 0;
     }
 }
@@ -109,15 +134,16 @@ int GenerateNewRequest(char (*req)[REQUEST_SIZE], char *ip_address)
     return 0;
 }
 
-int GetIpAddressInformation(char *ip_address)
+int GetIpAddressInformation(char ip_address[IPV4_SIZE], char notepad_option)
 {
     SOCKET socket;
     char request[REQUEST_SIZE], response[BUFFER_SIZE];
+    puts("\nLoading information..");
     GenerateNewRequest(&request, ip_address);
     SocketCreate(&socket);
     SocketConnect(&socket, IP_API_ADDRESS, 80);
     SocketSend(&socket, request, &response);
     closesocket(socket);
     WSACleanup();
-    return PrintInformation(response);
+    return PrintInformation(ip_address, response, notepad_option);
 }

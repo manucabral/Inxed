@@ -24,8 +24,9 @@ int GenerateError(char *message);
 int SocketCreate(SOCKET *st);
 int SocketConnect(SOCKET *st, char *host, int port);
 int SocketSend(SOCKET *st, char data[REQUEST_SIZE], char (*response)[BUFFER_SIZE]);
-int PrintInformation(char *response);
+int SaveNotepad(char ip_address[IPV4_SIZE], char content[BUFFER_SIZE]);
+int PrintInformation(char ip_address[IPV4_SIZE], char *response, char notepad_option);
 int GenerateNewRequest(char (*req)[REQUEST_SIZE], char *ip_address);
-int GetIpAddressInformation(char *ip_address);
+int GetIpAddressInformation(char ip_address[IPV4_SIZE], char notepad_option);
 
 #endif
