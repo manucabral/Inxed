@@ -12,7 +12,7 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-#define CURRENT_VERSION "1.0.0"
+#define CURRENT_VERSION "1.0.1"
 #define BUFFER_SIZE 1024
 #define REQUEST_SIZE 204
 #define IPV4_SIZE 16
